@@ -1,0 +1,186 @@
+name: Logic Fractal Wiki Research
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 5 * * 1'
+  push:
+    branches: ['main']
+    paths:
+      - 'logic_wiki/**'
+      - 'research/inbox/conversations/**'
+      - 'research/LOGIC_FRACTAL_PROGRAM_V1.md'
+      - 'research/ARK_SWARM_LOGIC_TRADER_INTEGRATION_V1.md'
+      - 'scripts/build_logic_wiki.py'
+      - 'logic_fractal/**'
+      - 'formal_reasoning/**'
+      - 'requirements-formal.txt'
+      - 'schemas/formal-claim-v1.schema.json'
+      - 'schemas/formal-check-result-v1.schema.json'
+      - 'tests/test_formal_reasoning.py'
+      - 'scripts/run_formal_reasoning_benchmarks.py'
+      - 'research/FORMAL_REASONING_ADAPTER_V1.md'
+      - 'ark_swarm/**'
+      - 'scripts/run_logic_agents.py'
+      - 'scripts/evaluate_logic_agent_bundle.py'
+      - 'scripts/run_ark_swarm.py'
+      - 'tests/test_multi_agent_logic_evaluation.py'
+      - 'tests/test_ark_swarm_logic_trader.py'
+      - 'scripts/ingest_conversation_export.py'
+      - 'tests/test_conversation_export_intake.py'
+      - 'schemas/conversation-intake-record-v1.schema.json'
+      - 'schemas/ark-swarm-cycle-report-v1.schema.json'
+      - 'schemas/candidate-evaluation-policy-v1.schema.json'
+      - 'schemas/source-grounded-logic-benchmark-case-v1.schema.json'
+      - 'schemas/source-grounded-logic-benchmark-manifest-v1.schema.json'
+      - 'formal_reasoning/examples/source_grounded_benchmark_manifest.json'
+      - 'scripts/audit_source_grounded_logic_benchmark.py'
+      - 'tests/test_source_grounded_logic_benchmark.py'
+      - 'research/SOURCE_GROUNDED_LOGIC_BENCHMARK_INTAKE_V1.md'
+      - 'schemas/typed-formal-fragment-v1.schema.json'
+      - 'schemas/logic-formalization-queue-item-v1.schema.json'
+      - 'schemas/logic-package-contract-v1.schema.json'
+      - 'tests/test_formal_typed_fragment.py'
+      - 'tests/test_formal_typed_benchmark.py'
+      - 'tests/test_formalization_queue.py'
+      - 'tests/test_logic_package_contract.py'
+      - 'tests/test_formal_package_schemas.py'
+      - 'scripts/run_typed_formal_benchmark.py'
+      - 'research/ARK_SWARM_FULL_STACK_GAP_ANALYSIS_V1.md'
+      - 'research/ecosystem/library_integration_matrix.json'
+      - 'scripts/validate_ark_swarm_library_matrix.py'
+      - '.github/workflows/logic-fractal-wiki.yml'
+
+  pull_request:
+    paths:
+      - 'logic_wiki/**'
+      - 'research/inbox/conversations/**'
+      - 'research/LOGIC_FRACTAL_PROGRAM_V1.md'
+      - 'scripts/build_logic_wiki.py'
+      - 'logic_fractal/**'
+      - 'scripts/run_logic_agents.py'
+      - 'scripts/evaluate_logic_agent_bundle.py'
+      - 'tests/test_multi_agent_logic_evaluation.py'
+      - 'ark_swarm/**'
+      - 'scripts/run_ark_swarm.py'
+      - 'tests/test_ark_swarm_logic_trader.py'
+      - 'schemas/ark-swarm-cycle-report-v1.schema.json'
+      - 'research/ARK_SWARM_LOGIC_TRADER_INTEGRATION_V1.md'
+      - 'scripts/ingest_conversation_export.py'
+      - 'tests/test_conversation_export_intake.py'
+      - 'schemas/conversation-intake-record-v1.schema.json'
+      - 'formal_reasoning/**'
+      - 'requirements-formal.txt'
+      - 'schemas/formal-claim-v1.schema.json'
+      - 'schemas/formal-check-result-v1.schema.json'
+      - 'schemas/candidate-evaluation-policy-v1.schema.json'
+      - 'schemas/source-grounded-logic-benchmark-case-v1.schema.json'
+      - 'schemas/source-grounded-logic-benchmark-manifest-v1.schema.json'
+      - 'formal_reasoning/examples/source_grounded_benchmark_manifest.json'
+      - 'scripts/audit_source_grounded_logic_benchmark.py'
+      - 'tests/test_source_grounded_logic_benchmark.py'
+      - 'research/SOURCE_GROUNDED_LOGIC_BENCHMARK_INTAKE_V1.md'
+      - 'tests/test_formal_reasoning.py'
+      - 'scripts/run_formal_reasoning_benchmarks.py'
+      - 'research/FORMAL_REASONING_ADAPTER_V1.md'
+      - 'schemas/typed-formal-fragment-v1.schema.json'
+      - 'schemas/logic-formalization-queue-item-v1.schema.json'
+      - 'schemas/logic-package-contract-v1.schema.json'
+      - 'tests/test_formal_typed_fragment.py'
+      - 'tests/test_formal_typed_benchmark.py'
+      - 'tests/test_formalization_queue.py'
+      - 'tests/test_logic_package_contract.py'
+      - 'tests/test_formal_package_schemas.py'
+      - 'scripts/run_typed_formal_benchmark.py'
+      - 'research/ARK_SWARM_FULL_STACK_GAP_ANALYSIS_V1.md'
+      - 'research/ecosystem/library_integration_matrix.json'
+      - 'scripts/validate_ark_swarm_library_matrix.py'
+      - '.github/workflows/logic-fractal-wiki.yml'
+
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  validate-build-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install bounded formal-reasoning dependency
+        run: python -m pip install --disable-pip-version-check -r requirements-formal.txt
+      - name: Compile private export intake utility
+        run: python -m compileall -q scripts/ingest_conversation_export.py
+      - name: Compile formal reasoning adapter
+        run: python -m compileall -q formal_reasoning scripts/run_formal_reasoning_benchmarks.py
+      - name: Test private conversation export intake
+        run: python -m unittest discover -s tests -p 'test_conversation_export_intake.py' -v
+      - name: Build and validate Logic Wiki
+        run: python scripts/build_logic_wiki.py --root . --out logic_wiki/generated
+      - name: Run Logic Wiki tests
+        run: python -m unittest discover -s logic_wiki/tests -v
+      - name: Run Logic Fractal Composer tests
+        run: python -m unittest discover -s logic_fractal/tests -v
+      - name: Run typed multi-scale fragment tests
+        run: python -m unittest discover -s logic_fractal/tests -p 'test_fragment_composer.py' -v
+      - name: Build first typed fractal model candidate
+        run: python scripts/build_first_fractal_model.py
+      - name: Test integrated logic-agent roles
+        run: python -m unittest discover -s tests -p 'test_multi_agent_logic_evaluation.py' -v
+      - name: Run formal reasoning adapter tests
+        run: python -m unittest discover -s tests -p 'test_formal_reasoning.py' -v
+      - name: Run formal reasoning benchmark
+        run: python scripts/run_formal_reasoning_benchmarks.py
+      - name: Validate ARK-Swarm library integration matrix
+        run: python scripts/validate_ark_swarm_library_matrix.py
+      - name: Test typed formal AST adapter
+        run: python -m unittest discover -s tests -p 'test_formal_typed_fragment.py' -v
+      - name: Test typed formal benchmark
+        run: python -m unittest discover -s tests -p 'test_formal_typed_benchmark.py' -v
+      - name: Run typed formal benchmark report
+        run: python scripts/run_typed_formal_benchmark.py --out research/reports/formal-reasoning/typed-fragment-benchmark-latest.json
+      - name: Test source-grounded benchmark intake
+        run: python -m unittest discover -s tests -p 'test_source_grounded_logic_benchmark.py' -v
+      - name: Audit source-grounded benchmark readiness
+        run: python scripts/audit_source_grounded_logic_benchmark.py --out research/reports/formal-reasoning/source-grounded-benchmark-latest.json
+      - name: Test formalization queue
+        run: python -m unittest discover -s tests -p 'test_formalization_queue.py' -v
+      - name: Test logic package lifecycle contract
+        run: python -m unittest discover -s tests -p 'test_logic_package_contract.py' -v
+      - name: Test formal package JSON schemas
+        run: python -m unittest discover -s tests -p 'test_formal_package_schemas.py' -v
+      - name: Run ARK-Swarm + Logic Trader tests
+        run: python -m unittest discover -s tests -p 'test_ark_swarm_logic_trader.py' -v
+      - name: Execute integrated ARK-Swarm + Logic Trader (includes existing six roles)
+        run: python scripts/run_ark_swarm.py
+      - name: Run bounded research-agent cycle
+        run: python scripts/run_logic_agents.py
+      - name: Upload wiki and readiness report
+        uses: actions/upload-artifact@v4
+        with:
+          name: logic-wiki-research-report
+          path: |
+            logic_wiki/generated/
+            research/reports/logic-fractal/
+            research/reports/agent-evaluation/
+            research/reports/ark-swarm/
+            research/reports/formal-reasoning/
+      - name: Propose generated wiki/report updates (no auto-merge)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/logic-wiki-generated
+          delete-branch: false
+          title: 'chore: refresh Logic Wiki and research readiness report'
+          commit-message: 'chore: refresh generated Logic Wiki and readiness report'
+          body: |
+            Automated deterministic build of the current versioned Logic Wiki catalog.
+            Review sources, statuses, and readiness deficits before merge. This PR does not
+            claim that conversation history was collected unless source records were added.
+          add-paths: |
+            logic_wiki/generated/**
+            research/reports/logic-fractal/**
+            research/reports/agent-evaluation/**
+            research/reports/ark-swarm/**
+            research/reports/formal-reasoning/**

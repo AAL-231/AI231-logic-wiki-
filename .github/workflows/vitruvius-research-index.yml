@@ -1,0 +1,74 @@
+name: Vitruvius Research Index
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 2 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build Vitruvius index
+        run: python scripts/vitruvius_automation_engine.py --write
+      - name: Run Vitruvius tests
+        run: |
+          python -m pip install --upgrade pip pytest
+          PYTHONPATH=. python -m pytest -q \
+            tests/test_vitruvius_automation_engine.py \
+            tests/test_vitruvius_forensic_research.py \
+            tests/test_research_agent_work_queue.py
+      - name: Build expanded forensic research queue
+        run: python scripts/vitruvius_forensic_research.py --write
+      - name: Build six-agent route queue
+        run: python scripts/build_research_agent_work_queue.py
+      - name: Validate six-agent contracts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          matrix = Path("agents/AGENT_RESPONSIBILITY_MATRIX_V1.yaml").read_text(encoding="utf-8")
+          runtime = Path("runtime/research-agent-network.yaml").read_text(encoding="utf-8")
+          queue = json.loads(Path("vitruvius/RESEARCH_AGENT_WORK_QUEUE.json").read_text(encoding="utf-8"))
+          required = ["VIT-SOURCE","RAMBAM-SOURCE","FORMALIZER","CROSS-CORPUS","CLAIM-FORENSIC","DELTA-REPORTER"]
+          for agent in required:
+              assert agent in matrix
+          assert "orchestrator: OR-01" in runtime
+          assert queue["agents"] == 7
+          assert queue["orchestrator"] == "OR-01"
+          print({"status":"VALID","specialists":6,"orchestrator":"OR-01"})
+          PY
+      - name: Validate generated forensic queue
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("vitruvius/VITRUVIUS_FORENSIC_WORK_QUEUE.json")
+          data = json.loads(p.read_text(encoding="utf-8"))
+          assert data["schema_version"] == "2.0.0"
+          assert data["coverage"]["books"] == list(range(1, 11))
+          assert data["agent_policy"]["structural_similarity_is_proof"] is False
+          assert data["agent_policy"]["negative_findings_are_first_class"] is True
+          required = {"VIT-CLAIM-50-CHAPTERS", "VIT-CLAIM-32-CORE", "VIT-COMP-MAIMONIDES", "VIT-COMP-WANGA"}
+          ids = {t["task_id"] for t in data["tasks"]}
+          assert required.issubset(ids)
+          print({"tasks": len(data["tasks"]), "books": 10, "status": "VALID"})
+          PY
+      - name: Upload generated research artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitruvius-research-index
+          path: |
+            vitruvius/VITRUVIUS_INDEX.json
+            vitruvius/VITRUVIUS_WORK_QUEUE.json
+            vitruvius/VITRUVIUS_FORENSIC_WORK_QUEUE.json
+            vitruvius/RESEARCH_AGENT_WORK_QUEUE.json
+            vitruvius/VITRUVIUS_FORENSIC_SCHEMA_V2.json
+            vitruvius/VITRUVIUS_FORENSIC_RESEARCH_SPEC_V3.yml

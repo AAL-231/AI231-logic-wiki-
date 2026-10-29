@@ -1,0 +1,175 @@
+WANGA / VITRUVIUS — CONSTITUTIONAL META-ARCHITECTURE
+==========================================================================
+
+                         GLOBAL SCIENCE / WANGA
+                                  |
+        +-------------------------+--------------------------+
+        |                         |                          |
+        v                         v                          v
+ RESEARCH + KNOWLEDGE      ARCHITECTURE FAMILIES      RESEARCH GROUPS
+        |                         |                          |
+        |                         |              +-----------+-----------+
+        |                         |              |     |     |     |     |
+        |                         |              v     v     v     v     v
+        |                         |           NEURAL  OS  RUNTIME NODE MEMORY
+        |                         |              |     |     |     |     |
+        |                         |              +-----+-----+-----+-----+
+        |                         |                            |
+        +-------------------------+----------------------------+
+                                  |
+                                  v
+                         WANGA LINEAGE SYSTEM
+                                  |
+             +--------------------+--------------------+
+             |                    |                    |
+             v                    v                    v
+        IDEA LINEAGE       RESEARCH LINEAGE     ARCHITECTURE LINEAGE
+             |                    |                    |
+             +--------------------+--------------------+
+                                  |
+                                  v
+                    LINEAGE MARRIAGE / INTEGRATION
+                                  |
+                 +----------------+----------------+
+                 |                |                |
+                 v                v                v
+             inherited        introduced      compatibility
+             elements         elements        / conflicts
+                 |                |                |
+                 +----------------+----------------+
+                                  |
+                                  v
+                          NEW DESCENDANT LINEAGE
+                                  |
+                                  v
+                         WANGA POLITEIA
+             +------------------+-------------------+
+             |                  |                   |
+             v                  v                   v
+      lineage memory     whole-system view    governance context
+             |                  |                   |
+             +------------------+-------------------+
+                                  |
+                                  v
+                   VITRUVIUS ORCHESTRATION LAYER
+                         <== META-ARCHITECTURE ==>
+                                  |
+        +-------------------------+--------------------------+
+        |            |             |             |            |
+        v            v             v             v            v
+   whole-view   reconstruction  synthesis   candidate-space compatibility
+        |            |             |             |            |
+        +------------+-------------+-------------+------------+
+                                  |
+                                  v
+                       MODEL SELECTION BOUNDARY
+                                  |
+                                  v
+                         LOGIC HANDOFF RECORD
+                                  |
+                                  v
+                       RATIONAL LOGIC MODEL LAYER
+                                  |
+                                  v
+                    NEURAL / ALGORITHMIC GOVERNANCE
+                                  |
+                                  v
+                         VALIDATION / OBSERVATION
+                                  |
+                                  v
+                         NEW KNOWLEDGE / EVIDENCE
+                                  |
+                                  v
+                           NEW LINEAGE EVENT
+                                  |
+                                  +---------------------> VITRUVIUS
+                                                          (recursive)
+
+==========================================================================
+
+VITRUVIUS DOES NOT EQUAL:
+- Rational Logic
+- a single reasoning model
+- evidence itself
+- provenance itself
+- proof of correctness
+- an authority that converts prediction into fact
+
+VITRUVIUS EQUALS:
+- whole-architecture orchestration context
+- lineage-aware architecture reconstruction
+- candidate model space
+- compatibility/composition context
+- documented model-selection boundary
+- recursive architectural continuity
+
+==========================================================================
+
+BRANCH ATTACHMENT POINTS
+
+BRANCH
+  |
+  +--> RESEARCH GROUP
+  |
+  +--> ASSET
+  |
+  +--> LINEAGE
+  |
+  +--> ARCHITECTURE FAMILY
+  |
+  +--> INTEGRATION EVENT
+  |
+  +--> RESEARCH QUESTION
+             |
+             v
+        VITRUVIUS LINK MAP
+             |
+             v
+      GLOBAL ARCHITECTURE REGISTRY
+
+RULE:
+GitHub existence != architectural membership.
+Architectural membership requires an explicit registry relationship.
+
+==========================================================================
+
+EVIDENCE STATES
+
+FACT / SOURCE
+    |
+OBSERVATION
+    |
+INTERPRETATION
+    |
+PREDICTION
+    |
+COMPOSITION CANDIDATE
+    |
+VALIDATION
+    |
+PROMOTED KNOWLEDGE
+
+No transition may silently collapse these categories.
+
+==========================================================================
+
+CANONICAL FLOW
+
+SOURCE
+ -> RESEARCH
+ -> IDEA
+ -> FORMULATION
+ -> ARTIFACT / MODEL
+ -> ARCHITECTURE FAMILY
+ -> LINEAGE
+ -> INTEGRATION
+ -> DESCENDANT
+ -> POLITEIA
+ -> VITRUVIUS
+ -> MODEL SELECTION
+ -> LOGIC HANDOFF
+ -> RATIONAL LOGIC
+ -> VALIDATION
+ -> NEW LINEAGE
+
+==========================================================================
